@@ -1,0 +1,532 @@
+/* ==========================================
+   SEABANK THEME VARIABLES & RESET
+   ========================================== */
+:root {
+  --seabank-orange: #FF5C00;
+  --seabank-orange-hover: #E55200;
+  --seabank-orange-light: #FFF0E6;
+  --seabank-dark: #222222;
+  --seabank-gray: #666666;
+  --seabank-bg: #F4F5F7;
+  --card-white: #FFFFFF;
+  --text-green: #20A052;
+  --text-red: #E53935;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  background-color: var(--seabank-bg);
+  color: var(--seabank-dark);
+  padding-bottom: 40px;
+}
+
+/* ==========================================
+   SPLASH SCREEN & INPUT NAMA
+   ========================================== */
+#welcome-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, #FF5C00, #FF8533, #FFA066);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.6s ease-in-out, visibility 0.6s ease-in-out;
+}
+
+#welcome-screen.hide {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.welcome-card {
+  text-align: center;
+  padding: 35px 25px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 24px;
+  max-width: 380px;
+  width: 88%;
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+.welcome-logo-badge {
+  width: 60px;
+  height: 60px;
+  background: white;
+  color: var(--seabank-orange);
+  font-weight: 800;
+  font-size: 22px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 15px auto;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.welcome-title {
+  font-size: 18px;
+  font-weight: 400;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.welcome-subtitle {
+  font-size: 13px;
+  opacity: 0.9;
+  margin-bottom: 20px;
+  font-weight: 300;
+}
+
+.welcome-input-group {
+  margin-bottom: 20px;
+}
+
+.welcome-input {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--seabank-dark);
+  text-align: center;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.welcome-input:focus {
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(0,0,0,0.15);
+}
+
+.btn-enter {
+  background: white;
+  color: var(--seabank-orange);
+  border: none;
+  padding: 12px 28px;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 25px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.btn-enter:hover {
+  transform: translateY(-2px);
+  background: #FFF5F0;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================
+   HEADER & FLOATING CARD
+   ========================================== */
+.app-header {
+  background: var(--seabank-orange);
+  color: white;
+  padding: 20px 20px 70px 20px;
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 600px;
+  margin: 0 auto 20px auto;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.greeting { font-size: 11px; opacity: 0.85; text-transform: uppercase; }
+.user-name { font-size: 16px; font-weight: 700; }
+
+.btn-change-name {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 5px 12px;
+  border-radius: 14px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-change-name:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.main-balance-card {
+  max-width: 600px;
+  margin: 0 auto;
+  background: var(--card-white);
+  color: var(--seabank-dark);
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 10px 25px rgba(255, 92, 0, 0.15);
+  margin-bottom: -60px;
+}
+
+.balance-label { font-size: 12px; color: var(--seabank-gray); font-weight: 600; }
+.balance-amount { font-size: 28px; font-weight: 800; color: var(--seabank-dark); margin: 4px 0 16px 0; }
+
+.balance-stats {
+  display: flex;
+  align-items: center;
+  background: var(--seabank-bg);
+  padding: 12px;
+  border-radius: 12px;
+}
+
+.stat-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+}
+
+.stat-item span { color: var(--seabank-gray); margin-bottom: 2px; }
+.stat-item strong { font-size: 14px; font-weight: 700; }
+.divider { width: 1px; height: 25px; background: #DDD; margin: 0 10px; }
+
+.text-income { color: var(--text-green); }
+.text-expense { color: var(--text-red); }
+
+/* ==========================================
+   APP CONTAINER & ACTION MENU (4 GRID)
+   ========================================== */
+.app-container {
+  max-width: 600px;
+  margin: 75px auto 0 auto;
+  padding: 0 16px;
+}
+
+.action-grid-card {
+  background: var(--card-white);
+  border-radius: 16px;
+  padding: 15px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.grid-menu {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.menu-item {
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 6px 2px;
+  border-radius: 12px;
+  transition: 0.2s;
+}
+
+.menu-item .icon-circle {
+  width: 44px;
+  height: 44px;
+  background: var(--seabank-bg);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: 0.2s;
+}
+
+.menu-item span { font-size: 11px; font-weight: 600; color: var(--seabank-gray); text-align: center; }
+
+.menu-item.active .icon-circle {
+  background: var(--seabank-orange-light);
+  color: var(--seabank-orange);
+}
+
+.menu-item.active span { color: var(--seabank-orange); font-weight: 700; }
+
+.menu-reset:hover .icon-reset {
+  background: #FFEBEE;
+}
+
+.menu-reset:hover span {
+  color: var(--text-red);
+}
+
+/* ==========================================
+   CARDS & FORMS
+   ========================================== */
+.card-form, .card-history {
+  background: var(--card-white);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.form-title, .history-header h3 {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: var(--seabank-dark);
+}
+
+.form-group { margin-bottom: 12px; }
+.form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--seabank-gray); margin-bottom: 5px; }
+
+.form-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+  background: #FAFAFA;
+  transition: 0.2s;
+}
+
+.form-input:focus {
+  border-color: var(--seabank-orange);
+  background: #FFF;
+}
+
+.btn-seabank {
+  width: 100%;
+  padding: 12px;
+  background: var(--seabank-orange);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 5px;
+  transition: 0.2s;
+}
+
+.btn-seabank:hover { background: var(--seabank-orange-hover); }
+
+.btn-outline {
+  background: transparent;
+  color: var(--seabank-orange);
+  border: 2px solid var(--seabank-orange);
+}
+
+.btn-outline:hover { background: var(--seabank-orange-light); }
+
+/* ==========================================
+   TRANSACTION LIST
+   ========================================== */
+.filter-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.transaction-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tx-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-radius: 12px;
+  background: #FAFAFA;
+  border: 1px solid #F0F0F0;
+}
+
+.tx-left { display: flex; align-items: center; gap: 12px; }
+
+.tx-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.bg-icon-in { background: #E8F5E9; }
+.bg-icon-out { background: #FFEBEE; }
+.bg-icon-trf { background: var(--seabank-orange-light); }
+
+.tx-details { display: flex; flex-direction: column; }
+.tx-title { font-size: 13px; font-weight: 700; color: var(--seabank-dark); }
+.tx-date { font-size: 11px; color: var(--seabank-gray); }
+
+.tx-right { display: flex; align-items: center; gap: 10px; }
+.tx-amount { font-size: 13px; font-weight: 700; }
+.amount-in { color: var(--text-green); }
+.amount-out { color: var(--text-red); }
+
+.btn-del {
+  background: none;
+  border: none;
+  color: #BBB;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.btn-del:hover { color: var(--text-red); }
+
+.empty-state {
+  text-align: center;
+  padding: 20px;
+  color: var(--seabank-gray);
+  font-size: 13px;
+}
+
+/* ==========================================
+   PRINT MEDIA STYLE
+   ========================================== */
+@media print {
+  #welcome-screen, .action-grid-card, .card-form, .filter-container, .btn-del, .btn-change-name { display: none !important; }
+  .app-header { background: none !important; color: black !important; padding: 0 !important; }
+  .main-balance-card { margin-bottom: 20px !important; box-shadow: none !important; border: 1px solid #CCC !important; }
+  body { background: white !important; }
+}
+/* ==========================================
+   MODAL KONFIRMASI RESET CUSTOM
+   ========================================== */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-backdrop.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-box {
+  background: white;
+  width: 88%;
+  max-width: 360px;
+  border-radius: 20px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  transform: scale(0.8);
+  transition: transform 0.3s ease;
+}
+
+.modal-backdrop.show .modal-box {
+  transform: scale(1);
+}
+
+.modal-icon {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--seabank-dark);
+  margin-bottom: 8px;
+}
+
+.modal-text {
+  font-size: 13px;
+  color: var(--seabank-gray);
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-modal {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-cancel {
+  background: #F0F0F0;
+  color: var(--seabank-dark);
+}
+
+.btn-cancel:hover {
+  background: #E4E4E4;
+}
+
+.btn-confirm-delete {
+  background: var(--text-red);
+  color: white;
+}
+
+.btn-confirm-delete:hover {
+  background: #D32F2F;
+}

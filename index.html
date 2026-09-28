@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kas Digital Saya</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ==========================================
+       SPLASH SCREEN (TAMPILAN SALAM & INPUT NAMA)
+       ========================================== -->
+  <div id="welcome-screen">
+    <div class="welcome-card">
+      <div class="welcome-logo-badge" id="welcome-avatar">XY</div>
+      <h1 class="welcome-title">Selamat Datang di<br><strong id="welcome-app-name">Uang Kas Digital</strong></h1>
+      <p class="welcome-subtitle">Masukkan nama pemilik kas sebelum masuk ke aplikasi:</p>
+      
+      <div class="welcome-input-group">
+        <input type="text" id="input-owner-name" class="welcome-input" placeholder="Masukkan nama Anda..." value="Xiao Yan">
+      </div>
+
+      <button class="btn-enter" onclick="enterApp()">Masuk ke Aplikasi →</button>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       HEADER APPS & KARTU UTAMA
+       ========================================== -->
+  <header class="app-header">
+    <div class="header-top">
+      <div class="user-profile">
+        <div class="avatar" id="header-avatar">XY</div>
+        <div>
+          <span class="greeting">Kas Digital</span>
+          <h2 class="user-name" id="display-owner-name">Xiao Yan</h2>
+        </div>
+      </div>
+      <button class="btn-change-name" onclick="changeName()">Ubah Nama</button>
+    </div>
+
+    <!-- Main Balance Card -->
+    <div class="main-balance-card">
+      <div class="balance-label">Total Saldo Kas (<span id="card-owner-name">Xiao Yan</span>)</div>
+      <div class="balance-amount" id="total-saldo">Rp 0</div>
+      
+      <div class="balance-stats">
+        <div class="stat-item">
+          <span>Pemasukan</span>
+          <strong id="total-masuk" class="text-income">Rp 0</strong>
+        </div>
+        <div class="divider"></div>
+        <div class="stat-item">
+          <span>Pengeluaran</span>
+          <strong id="total-keluar" class="text-expense">Rp 0</strong>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================
+       MAIN CONTENT CONTAINER
+       ========================================== -->
+  <main class="app-container">
+
+    <!-- FORM INPUT KAS -->
+    <section id="form-transaksi" class="card-form">
+      <h3 class="form-title">Catat Transaksi Kas</h3>
+      <form onsubmit="handleSimpanKas(event)">
+        <div class="form-group">
+          <label>Tanggal</label>
+          <input type="date" id="tanggal" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label>Keterangan</label>
+          <input type="text" id="keterangan" class="form-input" placeholder="Contoh: Iuran Kas, Pembelian Alat" required>
+        </div>
+        <div class="form-group">
+          <label>Jenis Transaksi</label>
+          <select id="jenis" class="form-input">
+            <option value="masuk">Pemasukan (+)</option>
+            <option value="keluar">Pengeluaran (-)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Nominal (Rp)</label>
+          <input type="number" id="jumlah" class="form-input" placeholder="0" min="1" required>
+        </div>
+        <button type="submit" class="btn-seabank">Simpan Transaksi</button>
+      </form>
+    </section>
+
+    <!-- RIWAYAT TRANSAKSI -->
+    <section class="card-history">
+      <div class="history-header">
+        <h3>Riwayat Transaksi Kas</h3>
+      </div>
+
+      <div class="filter-container">
+        <input type="text" id="input-cari" class="form-input" placeholder="Cari transaksi..." oninput="updateUI()">
+        <select id="filter-jenis" class="form-input" onchange="updateUI()">
+          <option value="semua">Semua</option>
+          <option value="masuk">Pemasukan</option>
+          <option value="keluar">Pengeluaran</option>
+        </select>
+      </div>
+
+      <div id="list-transaksi" class="transaction-list">
+        <!-- Rendered via JavaScript -->
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    let ownerName = localStorage.getItem('kas_owner_name') || 'Xiao Yan';
+    document.getElementById('input-owner-name').value = ownerName;
+
+    function getInitials(name) {
+      const words = name.trim().split(' ');
+      if (words.length >= 2) {
+        return (words[0][0] + words[1][0]).toUpperCase();
+      }
+      return name.substring(0, 2).toUpperCase();
+    }
+
+    function applyOwnerName(name) {
+      const initials = getInitials(name);
+      document.getElementById('display-owner-name').innerText = name;
+      document.getElementById('card-owner-name').innerText = name;
+      document.getElementById('header-avatar').innerText = initials;
+      document.getElementById('welcome-avatar').innerText = initials;
+      document.title = `Uang Kas ${name}`;
+    }
+
+    function enterApp() {
+      const inputVal = document.getElementById('input-owner-name').value.trim();
+      if (!inputVal) {
+        alert('Harap masukkan nama Anda terlebih dahulu!');
+        return;
+      }
+      
+      ownerName = inputVal;
+      localStorage.setItem('kas_owner_name', ownerName);
+      applyOwnerName(ownerName);
+
+      document.getElementById('welcome-screen').classList.add('hide');
+    }
+
+    function changeName() {
+      document.getElementById('welcome-screen').classList.remove('hide');
+    }
+
+    let transaksi = JSON.parse(localStorage.getItem('kas_data_xiaoyan')) || [];
+
+    document.getElementById('tanggal').valueAsDate = new Date();
+
+    function formatRupiah(angka) {
+      return 'Rp ' + Number(angka).toLocaleString('id-ID');
+    }
+
+    function formatTanggal(str) {
+      if (!str) return '-';
+      const d = new Date(str);
+      return d.getDate() + ' ' + ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'][d.getMonth()];
+    }
+
+    function updateUI() {
+      const listEl = document.getElementById('list-transaksi');
+      const keyword = document.getElementById('input-cari').value.toLowerCase();
+      const filterJenis = document.getElementById('filter-jenis').value;
+
+      listEl.innerHTML = '';
+
+      let totalMasuk = 0;
+      let totalKeluar = 0;
+
+      transaksi.forEach(item => {
+        if (item.jenis === 'masuk') totalMasuk += item.jumlah;
+        else totalKeluar += item.jumlah;
+      });
+
+      const filtered = transaksi.filter(item => {
+        const matchText = item.keterangan.toLowerCase().includes(keyword);
+        let matchJenis = true;
+        if (filterJenis === 'masuk') matchJenis = (item.jenis === 'masuk');
+        else if (filterJenis === 'keluar') matchJenis = (item.jenis === 'keluar');
+
+        return matchText && matchJenis;
+      });
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = '<div class="empty-state">Belum ada transaksi ditemukan.</div>';
+      } else {
+        filtered.forEach(item => {
+          const indexAsli = transaksi.indexOf(item);
+          const card = document.createElement('div');
+          card.className = 'tx-item';
+
+          const isPlus = item.jenis === 'masuk';
+          const iconBg = isPlus ? 'bg-icon-in' : 'bg-icon-out';
+          const iconText = isPlus ? '📥' : '📤';
+
+          card.innerHTML = `
+            <div class="tx-left">
+              <div class="tx-icon ${iconBg}">${iconText}</div>
+              <div class="tx-details">
+                <span class="tx-title">${item.keterangan}</span>
+                <span class="tx-date">${formatTanggal(item.tanggal)}</span>
+              </div>
+            </div>
+            <div class="tx-right">
+              <span class="tx-amount ${isPlus ? 'amount-in' : 'amount-out'}">
+                ${isPlus ? '+' : '-'}${formatRupiah(item.jumlah)}
+              </span>
+              <button onclick="hapusTransaksi(${indexAsli})" class="btn-del" title="Hapus">✕</button>
+            </div>
+          `;
+          listEl.appendChild(card);
+        });
+      }
+
+      document.getElementById('total-masuk').innerText = formatRupiah(totalMasuk);
+      document.getElementById('total-keluar').innerText = formatRupiah(totalKeluar);
+      document.getElementById('total-saldo').innerText = formatRupiah(totalMasuk - totalKeluar);
+
+      localStorage.setItem('kas_data_xiaoyan', JSON.stringify(transaksi));
+    }
+
+    function handleSimpanKas(e) {
+      e.preventDefault();
+      const tanggal = document.getElementById('tanggal').value;
+      const keterangan = document.getElementById('keterangan').value;
+      const jenis = document.getElementById('jenis').value;
+      const jumlah = parseFloat(document.getElementById('jumlah').value);
+
+      transaksi.unshift({ tanggal, keterangan, jenis, jumlah });
+      updateUI();
+
+      document.getElementById('keterangan').value = '';
+      document.getElementById('jumlah').value = '';
+    }
+
+    function hapusTransaksi(index) {
+      if (confirm('Hapus transaksi ini?')) {
+        transaksi.splice(index, 1);
+        updateUI();
+      }
+    }
+
+    applyOwnerName(ownerName);
+    updateUI();
+  </script>
+</body>
+</html>
